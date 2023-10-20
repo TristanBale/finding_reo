@@ -4,7 +4,7 @@
     <title>JS Mouse Location Demo</title>
     <style>
         #track {
-            background-color: goldenrod;
+            background-color: lavender;
             height: 600px;
             width: 800px;
         }
@@ -17,9 +17,16 @@
 
         #foundReo {
             max-width: max-content;
-            font-size: larger;
+            font-size: 36px;
             font-weight: 700;
             color: red;
+            box-sizing: border-box;
+            margin: 18px 0px;
+        }
+
+        #reoUpset {
+            font-size: 25px;
+            box-sizing: border-box;
         }
     </style>
 </head>
@@ -30,47 +37,41 @@
     </div>
     <p id="log"></p>
     <p id="reoLog"> Try patting reo. </p>
+<script>
+    const track = document.querySelector('#track');
+    const log = document.querySelector('#log');
+    const reoLog = document.querySelector('#reoLog');
+    const reoCanvas = document.querySelector('#reoCanvas');
+    const reoContext = reoCanvas.getContext('2d');
+    const reoImage = new Image();
 
-    <script>
-        let track = document.querySelector('#track');
-        track.addEventListener('mousemove', (e) => {
-            let log = document.querySelector('#log');
-            
-            log.innerText = `
-            Screen X/Y: (${e.screenX}, ${e.screenY})
-            Client X/Y: (${e.clientX}, ${e.clientY})`
-        });
+    reoImage.src = './reo_shout-removebg-preview.png';
 
-        let reoLog = document.querySelector('#reoLog');
-        let reoCanvas = document.querySelector('#reoCanvas');
-        let reoContext = reoCanvas.getContext('2d');
+    reoImage.onload = function() {
+        reoCanvas.width = reoImage.width;
+        reoCanvas.height = reoImage.height;
+        reoContext.drawImage(reoImage, 0, 0, reoImage.width, reoImage.height);
 
-        let reoImage = new Image();
-        reoImage.src = './reo_shout-removebg-preview.png'; // Load your irregularly shaped icon
+        track.addEventListener('mousemove', handleMouseMove);
 
-        reoImage.onload = function() {
-            reoCanvas.width = reoImage.width;
-            reoCanvas.height = reoImage.height;
-            reoContext.drawImage(reoImage, 0, 0, reoImage.width, reoImage.height);
+        function handleMouseMove(e) {
+            const mouseX = e.clientX - reoCanvas.getBoundingClientRect().left;
+            const mouseY = e.clientY - reoCanvas.getBoundingClientRect().top;
 
-            reoCanvas.addEventListener('mousemove', (e) => {
-                let mouseX = e.clientX - reoCanvas.getBoundingClientRect().left;
-                let mouseY = e.clientY - reoCanvas.getBoundingClientRect().top;
+            const pixelData = reoContext.getImageData(mouseX, mouseY, 1, 1).data;
+            const alpha = pixelData[3];
 
-                let pixelData = reoContext.getImageData(mouseX, mouseY, 1, 1).data;
-                let alpha = pixelData[3]; // Alpha value (transparency)
-
-                if (alpha !== 0) {
-                    reoLog.innerText = 'Yes pat reo!';
-                    reoLog.setAttribute('id', 'foundReo');
-                    reoImage.src ='./reo_pat-removebg-preview.png';
-                } else {
-                    reoLog.innerText = 'reo wants pats';
-                    reoLog.setAttribute('id', '');
-                    reoImage.src = './reo_shout-removebg-preview.png';
-                }
-            });
-        };
-    </script>
+            if (alpha !== 0) {
+                reoLog.innerText = 'Yes pat reo!';
+                reoLog.setAttribute('id', 'foundReo');
+                reoImage.src ='./reo_pat-removebg-preview.png';
+            } else {
+                reoLog.innerText = 'reo wants pats';
+                reoLog.setAttribute('id', 'reoUpset');
+                reoImage.src = './reo_shout-removebg-preview.png';
+            }
+        }
+    };
+</script>
 </body>
 </html>
