@@ -24,13 +24,12 @@
     </style>
 </head>
 <body>
-    <p style="font-size: 24px;">Move your mouse to find reo.</p>
+    <p style="font-size: 24px;">Oh no reo is upset.</p>
     <div style="position: relative; left: 0; top: 0;" id="track">
             <canvas id="reoCanvas" class="reo"></canvas>
     </div>
     <p id="log"></p>
-    <p id="reoLog"> Where is reo? </p>
-    <a href="./reo_pat.html" style="text-decoration-line: none; color: blueviolet; font-size: 18px;"> I wanna pat reo </a>
+    <p id="reoLog"> Try patting reo. </p>
 
     <script>
         let track = document.querySelector('#track');
@@ -47,7 +46,7 @@
         let reoContext = reoCanvas.getContext('2d');
 
         let reoImage = new Image();
-        reoImage.src = './reo.png'; // Load your irregularly shaped icon
+        reoImage.src = './reo_shout-removebg-preview.png'; // Load your irregularly shaped icon
 
         reoImage.onload = function() {
             reoCanvas.width = reoImage.width;
@@ -62,11 +61,13 @@
                 let alpha = pixelData[3]; // Alpha value (transparency)
 
                 if (alpha !== 0) {
-                    reoLog.innerText = 'You found Reo!';
+                    reoLog.innerText = 'Yes pat reo!';
                     reoLog.setAttribute('id', 'foundReo');
+                    reoImage.src ='./reo_pat-removebg-preview.png';
                 } else {
-                    reoLog.innerText = 'Where is reo?';
+                    reoLog.innerText = 'reo wants pats';
                     reoLog.setAttribute('id', '');
+                    reoImage.src = './reo_shout-removebg-preview.png';
                 }
             });
         };
