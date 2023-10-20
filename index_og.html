@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>JS Mouse Location Demo</title>
+    <style>
+        #track {
+            background-color: black;
+            height: 600px;
+            width: 800px;
+        }
+
+        .reo {
+            position: absolute;
+            left: 60px;
+            top: 80px;
+        }
+
+        #foundReo {
+            max-width: max-content;
+            font-size: larger;
+            font-weight: 700;
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <p>Move your mouse to find reo.</p>
+    <div style="position: relative; left: 0; top: 0;" id="track">
+            <img src="./reoCropped.png" class="reo"/>
+    </div>
+    <p id="log"></p>
+    <p id="reoLog"> Where is reo? </p>
+
+    <script>
+        let track = document.querySelector('#track');
+        track.addEventListener('mousemove', (e) => {
+            let log = document.querySelector('#log');
+            
+            log.innerText = `
+            Screen X/Y: (${e.screenX}, ${e.screenY})
+            Client X/Y: (${e.clientX}, ${e.clientY})`
+        });
+
+        let reoLog = document.querySelector('#reoLog');
+        let reo = document.querySelector('.reo');
+            reo.addEventListener('mouseover', (e) =>{
+                reoLog.innerText = 'You found Reo!';
+                reoLog.setAttribute('id', 'foundReo');
+            } );
+            reo.addEventListener('mouseout', (e) =>{
+                reoLog.innerText = 'Where is reo?';
+                reoLog.setAttribute('id', '');
+            });
+
+       
+    </script>
+</body>
+</html>
